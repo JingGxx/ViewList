@@ -1,6 +1,6 @@
 import { GoogleGenAI } from "@google/genai";
 
-const apiKey = process.env.API_KEY || '';
+const apiKey = process.env.API_KEY || 'AIzaSyBrq-18O4yFfGIimLdg1btne1wJZpDb7pE';
 const ai = new GoogleGenAI({ apiKey });
 
 export const generateRealEstateAdvice = async (
