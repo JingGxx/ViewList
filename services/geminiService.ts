@@ -1,12 +1,21 @@
-import { GoogleGenAI } from "@google/genai";
+import { GoogleGenAI, GenerateContentResponse } from "@google/genai";
 
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+// safely access process.env.API_KEY
+const apiKey = (typeof process !== 'undefined' && process.env) ? process.env.API_KEY : '';
+
+// Initialize Gemini API only if key exists to prevent immediate crash
+// If apiKey is empty, calls will fail gracefully in the function
+const ai = new GoogleGenAI({ apiKey: apiKey || 'MISSING_KEY' });
 
 export const generateRealEstateAdvice = async (
   prompt: string,
   history: { role: string; parts: { text: string }[] }[]
 ) => {
   try {
+    if (!apiKey) {
+      throw new Error("API Key is missing. Please check your environment configuration.");
+    }
+
     const chat = ai.chats.create({
       model: 'gemini-2.5-flash',
       config: {

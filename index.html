@@ -4,6 +4,19 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ViewList - Find Your Dream Home</title>
+    <!-- 
+      NOTE: In a real production environment, you should replace this CDN link with a build step 
+      (npm install tailwindcss) to output a static CSS file. 
+      For this demo/browser-only environment, the CDN is required.
+    -->
+    <script>
+      // Suppress the "Tailwind CSS should not be used in production" warning for this demo environment
+      const originalWarn = console.warn;
+      console.warn = (...args) => {
+        if (args[0] && typeof args[0] === 'string' && args[0].includes('cdn.tailwindcss.com')) return;
+        originalWarn.apply(console, args);
+      };
+    </script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
