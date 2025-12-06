@@ -1,16 +1,11 @@
 import { GoogleGenAI } from "@google/genai";
 
-const apiKey = process.env.API_KEY || 'AIzaSyBrq-18O4yFfGIimLdg1btne1wJZpDb7pE';
-const ai = new GoogleGenAI({ apiKey });
+const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
 export const generateRealEstateAdvice = async (
   prompt: string,
   history: { role: string; parts: { text: string }[] }[]
 ) => {
-  if (!apiKey) {
-    throw new Error("API Key not found");
-  }
-
   try {
     const chat = ai.chats.create({
       model: 'gemini-2.5-flash',
