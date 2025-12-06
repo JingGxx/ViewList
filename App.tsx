@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { PropertyCard } from './components/PropertyCard';
@@ -156,6 +156,28 @@ const App: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
 
+  // Load user from localStorage on mount
+  useEffect(() => {
+    const savedUser = localStorage.getItem('viewlist_user');
+    if (savedUser) {
+      try {
+        setUser(JSON.parse(savedUser));
+      } catch (e) {
+        localStorage.removeItem('viewlist_user');
+      }
+    }
+  }, []);
+
+  const handleLogin = (newUser: User) => {
+    setUser(newUser);
+    localStorage.setItem('viewlist_user', JSON.stringify(newUser));
+  };
+
+  const handleLogout = () => {
+    setUser(null);
+    localStorage.removeItem('viewlist_user');
+  };
+
   // Filter properties based on current filters
   const filteredProperties = useMemo(() => {
     return MOCK_PROPERTIES.filter(p => {
@@ -208,7 +230,7 @@ const App: React.FC = () => {
           activePage={currentPage}
           user={user}
           onSignIn={() => setIsAuthModalOpen(true)}
-          onSignOut={() => setUser(null)}
+          onSignOut={handleLogout}
         />
       )}
       
@@ -385,9 +407,7 @@ const App: React.FC = () => {
       <AuthModal 
         isOpen={isAuthModalOpen} 
         onClose={() => setIsAuthModalOpen(false)} 
-        onLogin={(newUser) => {
-          setUser(newUser);
-        }}
+        onLogin={handleLogin}
       />
 
       <AIAssistant />
